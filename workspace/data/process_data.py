@@ -3,15 +3,28 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 def custom_split(x):
+    """
+    Expected Input: String of format 'sometext-somenumber'.
+    Output: Returns 'somenumber' in string format.
+    """
     split_str = x.split('-')
     number = split_str[1]
     return number
 
 def convert_num(x):
+    """
+    Parse the input string into an integer.
+    """
     return int(x)
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    This function reads messages data from the messages_filepath.
+    It also reads corresponding categories data from the categories_filepath.
+    It performs various ETL steps to ensure these two data can be merged.
+    It returns the transformed df.
+    """
     # load messages dataset
     messages = pd.read_csv(messages_filepath)
     # load categories dataset
@@ -41,6 +54,9 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    Cleans up the input df by removing duplicate rows.
+    """
     # check number of duplicates
     df_duplicates = df[df.duplicated()]
     print("Number of duplicates: ", df_duplicates.shape[0])
@@ -54,6 +70,11 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    """
+    After all ETL operations are performed, thie function
+    saves the clean df into a local SQLite db file which can then be
+    loaded and read from.
+    """
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('InsertTableName', engine, index=False)
     return
