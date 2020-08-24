@@ -4,6 +4,7 @@ This project analyses messages received during a disaster and tries to classify 
 Using this model, if any user provides a message as an input, the program will provide the categories for the message as the output.
 
 e.g. Input: **this is a disaster call**
+
 Output: This message could belong to these categories: **Related, Request, Aid-Related, Weather-Related, Floods, Direct Report**
 
 # How is this project organized:
