@@ -18,8 +18,14 @@ from sklearn.externals import joblib
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
 
-
 def load_data(database_filepath):
+    """
+    This function loads the clean data stored in the database and 
+    populates the dataframe from the data. It also populates the 
+    Features, Targets and Category Names.
+    Input: Filepath of the database file
+    Output: Features (X), Targets (Y), Category Names
+    """
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql_table('InsertTableName', engine)
     df = df.dropna(subset=df.select_dtypes(float).columns, how='all')
@@ -31,6 +37,12 @@ def load_data(database_filepath):
 
 special_char_regex = '[^\w\*]'
 def tokenize(text):
+    """
+    This function normalizes, lemmatizes and tokenizes the
+    input text. It then returns these clean tokens.
+    Input: Text
+    Output: Clean tokens
+    """
     special_chars = re.findall(special_char_regex, text)
     for special_char in special_chars:
         text = text.replace(special_char, " ")
@@ -46,6 +58,10 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    This function creates the ML model. Primarily, it defines a
+    ML pipeline and the steps to be executed as part of this pipeline.
+    """
     pipeline = Pipeline([
                 ('vect', CountVectorizer(tokenizer=tokenize)),
                 ('tfidf', TfidfTransformer()),
@@ -55,6 +71,11 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    This function checks the accuracy of the Ml model. It checks and outputs values
+    for accuracy and also prints a report of F1 score and other accuracy metrics for
+    each classification category. This accuracy is measured on the test data.
+    """
     Y_pred = model.predict(X_test)
     accuracy = (Y_pred == Y_test).mean()
     print("Accuracy:", accuracy)
@@ -63,6 +84,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    This function saves the model into a pickle file.
+    Input: ML model to be saved, Pickle Filepath where ML model should be stored at 
+    """
     # Save the model as a pickle in a file 
     joblib.dump(model, model_filepath)
 
