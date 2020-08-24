@@ -42,6 +42,8 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+    total_count = df.count()['message']
+    frequency_distribution = genre_counts/total_count * 100
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -63,6 +65,24 @@ def index():
                     'title': "Genre"
                 }
             }
+        },
+        {
+            'data': [
+                Bar(
+                    x=genre_names,
+                    y=frequency_distribution
+                )
+            ],
+
+            'layout': {
+                'title': 'Frequency / Popularity distribution of Message Genres',
+                'yaxis': {
+                    'title': "Frequency (in percentage)"
+                },
+                'xaxis': {
+                    'title': "Genre"
+                }
+            }   
         }
     ]
     
